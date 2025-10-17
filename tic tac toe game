@@ -1,0 +1,57 @@
+# Tic-Tac-Toe Game in Python
+
+SIZE = 3
+
+def print_board(board):
+    for i in range(SIZE):
+        print(" | ".join(board[i]))
+        if i < SIZE - 1:
+            print("---|---|---")
+    print()
+
+def check_winner(board, player):
+    # Check rows and columns
+    for i in range(SIZE):
+        if all(board[i][j] == player for j in range(SIZE)) or \
+           all(board[j][i] == player for j in range(SIZE)):
+            return True
+    # Check diagonals
+    if all(board[i][i] == player for i in range(SIZE)) or \
+       all(board[i][SIZE - 1 - i] == player for i in range(SIZE)):
+        return True
+    return False
+
+def is_full(board):
+    return all(cell != ' ' for row in board for cell in row)
+
+def main():
+    board = [[' ' for _ in range(SIZE)] for _ in range(SIZE)]
+    current_player = 'X'
+
+    print("Welcome to Tic-Tac-Toe!")
+    print_board(board)
+
+    while True:
+        try:
+            row, col = map(int, input(f"Player {current_player}, enter your move (row and column, 0-2): ").split())
+            if row < 0 or row >= SIZE or col < 0 or col >= SIZE or board[row][col] != ' ':
+                print("Invalid move! Try again.")
+                continue
+
+            board[row][col] = current_player
+            print_board(board)
+
+            if check_winner(board, current_player):
+                print(f"Player {current_player} wins!")
+                break
+
+            if is_full(board):
+                print("It's a draw!")
+                break
+
+            current_player = 'O' if current_player == 'X' else 'X'
+        except ValueError:
+            print("Invalid input! Please enter two numbers separated by a space.")
+
+if _name_ == "_main_":
+    main()
